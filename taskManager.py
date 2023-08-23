@@ -3,13 +3,9 @@ import sqlite3
 from customtkinter import *
 import os
 import appdirs
+import platform
 
 myappid = "taskManager-v1.0"
-try:
-    from ctypes import windll  # Only exists on Windows.
-    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-except ImportError:
-    pass
 
 set_appearance_mode("dark")
 # customtkinter.set_default_color_theme('')
@@ -20,9 +16,15 @@ root.geometry('500x500')
 root.minsize(500,500)
 
 basedir = os.path.dirname(__file__)
-# icono de la app
-# root.iconbitmap(os.path.join(basedir, 'taskmanager.ico'))
-root.iconphoto(True, PhotoImage(file=os.path.join(basedir, "taskmanager.png")))
+
+# Agregar icono de la app
+# Verificar el sistema operativo
+if platform.system() == "Windows":
+    from ctypes import windll  # Only exists on Windows.
+    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    root.iconbitmap(os.path.join(basedir, 'taskmanager.ico'))
+elif platform.system() == "Linux":
+    root.iconphoto(True, PhotoImage(file=os.path.join(basedir, "taskmanager.png")))
 
 frame = CTkFrame(root)
 frame.grid(row=0, column=0, padx=30, pady=30, ipadx=30, ipady=30)
